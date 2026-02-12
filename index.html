@@ -28,7 +28,7 @@
 
         /* Dark Mode Overrides */
         body.dark-mode {
-            --primary: #3b82f6; /* Slightly lighter blue for dark mode contrast */
+            --primary: #3b82f6;
             --primary-dark: #60a5fa;
             --bg-body: #111827;
             --bg-card: #1f2937;
@@ -183,11 +183,11 @@
             <div class="grid grid-4 mb-4">
                 <div class="card">
                     <div class="text-sm">Total Spent (Month)</div>
-                    <div class="text-xl private-data" id="dashTotalSpent">$0.00</div>
+                    <div class="text-xl private-data" id="dashTotalSpent">₱0.00</div>
                 </div>
                 <div class="card">
                     <div class="text-sm">Remaining Budget</div>
-                    <div class="text-xl private-data" id="dashRemaining">$0.00</div>
+                    <div class="text-xl private-data" id="dashRemaining">₱0.00</div>
                 </div>
                 <div class="card">
                     <div class="text-sm">Savings Rate</div>
@@ -195,7 +195,7 @@
                 </div>
                 <div class="card">
                     <div class="text-sm">Net Balance</div>
-                    <div class="text-xl private-data" id="dashNet">$0.00</div>
+                    <div class="text-xl private-data" id="dashNet">₱0.00</div>
                 </div>
             </div>
 
@@ -203,12 +203,12 @@
                 <div class="card">
                     <h3>Budget Status</h3>
                     <div id="budgetBars" class="mt-4 grid gap-4">
-                        </div>
+                    </div>
                 </div>
                 <div class="card">
                     <h3>Recent Transactions</h3>
                     <div id="recentList" class="mt-4 grid gap-2">
-                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -219,7 +219,7 @@
                     <input type="text" id="searchTx" placeholder="Search description..." style="max-width: 300px;">
                     <select id="filterCategory" style="max-width: 200px;">
                         <option value="all">All Categories</option>
-                        </select>
+                    </select>
                 </div>
                 <div class="table-container">
                     <table>
@@ -234,7 +234,7 @@
                             </tr>
                         </thead>
                         <tbody id="txTableBody">
-                            </tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -244,17 +244,17 @@
             <div class="grid grid-2">
                 <div class="card">
                     <h3>Budget Configuration</h3>
-                    <p class="text-sm mb-4">Set monthly limits. Zero-based budgeting: Assign every dollar.</p>
+                    <p class="text-sm mb-4">Set monthly limits. Zero-based budgeting: Assign every peso.</p>
                     <div class="flex flex-between mb-4">
                          <span>Expected Income:</span>
                          <input type="number" id="monthlyIncome" value="0" style="width: 150px; text-align: right;">
                     </div>
                     <div id="categoryInputs">
-                        </div>
+                    </div>
                     <div class="mt-4 box-highlight">
                         <div class="flex flex-between">
                             <strong>Unassigned Money:</strong>
-                            <strong id="unassignedMoney" class="private-data">$0.00</strong>
+                            <strong id="unassignedMoney" class="private-data">₱0.00</strong>
                         </div>
                     </div>
                 </div>
@@ -278,24 +278,24 @@
                 <div class="card">
                     <h3>Spending by Group</h3>
                     <div id="groupBreakdown" class="mt-4">
-                        </div>
+                    </div>
                 </div>
                 <div class="card">
                     <h3>Last 6 Months (Total Outflow)</h3>
                     <div id="trendChart" class="chart-bar-container">
-                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <button class="fab" id="openAddTxModal">+</button>
+    <button class="fab" id="openAddTxModal" aria-label="Add transaction">+</button>
 
     <dialog id="txModal">
         <form id="txForm">
             <div class="modal-header">
                 <h3>Add Transaction</h3>
-                <button type="button" class="btn-outline" style="border:none;" onclick="document.getElementById('txModal').close()">✕</button>
+                <button type="button" class="btn-outline" style="border:none;" onclick="document.getElementById('txModal').close()" aria-label="Close">✕</button>
             </div>
             <div class="modal-body grid gap-4">
                 <div class="flex gap-2">
@@ -305,21 +305,21 @@
                 <input type="hidden" id="txType" value="expense">
                 
                 <div>
-                    <label class="text-sm">Amount</label>
-                    <input type="number" id="txAmount" step="0.01" required placeholder="0.00">
+                    <label class="text-sm" for="txAmount">Amount</label>
+                    <input type="number" id="txAmount" step="0.01" required placeholder="0.00" min="0.01">
                 </div>
                 <div>
-                    <label class="text-sm">Date</label>
+                    <label class="text-sm" for="txDate">Date</label>
                     <input type="date" id="txDate" required>
                 </div>
                 <div>
-                    <label class="text-sm">Description</label>
-                    <input type="text" id="txDesc" required placeholder="e.g. Grocery Store">
+                    <label class="text-sm" for="txDesc">Description</label>
+                    <input type="text" id="txDesc" required placeholder="e.g. Grocery Store" maxlength="200">
                 </div>
-                <div>
-                    <label class="text-sm">Category</label>
+                <div id="categorySelectContainer">
+                    <label class="text-sm" for="txCategory">Category</label>
                     <select id="txCategory" required>
-                        </select>
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">
@@ -342,34 +342,58 @@
             state: {
                 transactions: [],
                 categories: [
-                    { id: 'c1', name: 'Rent/Mortgage', group: 'needs', limit: 1200 },
-                    { id: 'c2', name: 'Groceries', group: 'needs', limit: 400 },
-                    { id: 'c3', name: 'Utilities', group: 'needs', limit: 150 },
-                    { id: 'c4', name: 'Dining Out', group: 'wants', limit: 100 },
-                    { id: 'c5', name: 'Entertainment', group: 'wants', limit: 100 },
-                    { id: 'c6', name: 'Emergency Fund', group: 'savings', limit: 200 }
+                    { id: 'c1', name: 'Rent/Mortgage', group: 'needs', limit: 15000 },
+                    { id: 'c2', name: 'Groceries', group: 'needs', limit: 5000 },
+                    { id: 'c3', name: 'Utilities', group: 'needs', limit: 2000 },
+                    { id: 'c4', name: 'Dining Out', group: 'wants', limit: 1500 },
+                    { id: 'c5', name: 'Entertainment', group: 'wants', limit: 1000 },
+                    { id: 'c6', name: 'Emergency Fund', group: 'savings', limit: 3000 }
                 ],
-                income: 2500,
+                income: 30000,
                 privacyMode: false,
-                theme: 'light' // Default theme
+                theme: 'light'
             },
 
             init() {
-                const saved = localStorage.getItem('zenbudget_data');
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    this.state = { ...this.state, ...parsed }; // Merge to ensure new keys exist
+                try {
+                    const saved = localStorage.getItem('zenbudget_data');
+                    if (saved) {
+                        const parsed = JSON.parse(saved);
+                        this.state = { ...this.state, ...parsed };
+                    }
+                } catch (error) {
+                    console.error('Failed to load data:', error);
+                    alert('Failed to load saved data. Starting fresh.');
                 }
             },
 
             save() {
-                localStorage.setItem('zenbudget_data', JSON.stringify(this.state));
+                try {
+                    localStorage.setItem('zenbudget_data', JSON.stringify(this.state));
+                } catch (error) {
+                    console.error('Failed to save data:', error);
+                    if (error.name === 'QuotaExceededError') {
+                        alert('Storage quota exceeded. Consider exporting and clearing old data.');
+                    } else {
+                        alert('Failed to save data. Changes may be lost.');
+                    }
+                }
                 App.render();
             },
 
             addTransaction(tx) {
-                this.state.transactions.push({ ...tx, id: Date.now().toString() });
+                if (!tx.amount || !tx.date || !tx.desc || !tx.type) {
+                    console.error('Invalid transaction data');
+                    return false;
+                }
+                
+                this.state.transactions.push({ 
+                    ...tx, 
+                    id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                    amount: Utils.roundMoney(tx.amount)
+                });
                 this.save();
+                return true;
             },
 
             deleteTransaction(id) {
@@ -378,33 +402,73 @@
             },
 
             addCategory(name, group) {
-                this.state.categories.push({ id: Date.now().toString(), name, group, limit: 0 });
+                this.state.categories.push({ 
+                    id: 'c' + Date.now().toString(), 
+                    name, 
+                    group, 
+                    limit: 0 
+                });
                 this.save();
             },
 
             updateBudgetLimit(id, limit) {
                 const cat = this.state.categories.find(c => c.id === id);
-                if (cat) cat.limit = parseFloat(limit);
+                const parsedLimit = parseFloat(limit);
+                
+                if (isNaN(parsedLimit) || parsedLimit < 0) {
+                    alert('Budget limit must be a positive number');
+                    return false;
+                }
+                if (parsedLimit > 999999999) {
+                    alert('Budget limit is too large');
+                    return false;
+                }
+                
+                if (cat) cat.limit = Utils.roundMoney(parsedLimit);
                 this.save();
+                return true;
             },
             
             toggleTheme() {
                 this.state.theme = this.state.theme === 'light' ? 'dark' : 'light';
-                this.save(); // Save preference
+                this.save();
                 return this.state.theme;
             }
         };
 
         /* --- 2. UTILS --- */
         const Utils = {
-            fmtMoney: (num) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num),
-            fmtDate: (str) => new Date(str).toLocaleDateString(),
+            roundMoney: (num) => Math.round((num + Number.EPSILON) * 100) / 100,
+            
+            fmtMoney: (num) => new Intl.NumberFormat('en-PH', { 
+                style: 'currency', 
+                currency: 'PHP',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2 
+            }).format(num),
+            
+            fmtDate: (str) => new Date(str).toLocaleDateString('en-PH'),
+            
             isCurrentMonth: (dateStr) => {
                 const d = new Date(dateStr);
                 const now = new Date();
                 return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
             },
-            groupBy: (arr, key) => arr.reduce((acc, item) => ((acc[item[key]] = [...(acc[item[key]] || []), item]), acc), {})
+            
+            groupBy: (arr, key) => arr.reduce((acc, item) => ((acc[item[key]] = [...(acc[item[key]] || []), item]), acc), {}),
+            
+            getCategoryById: (id) => Store.state.categories.find(c => c.id === id),
+            
+            getCategoryName: (id) => {
+                const cat = Utils.getCategoryById(id);
+                return cat ? cat.name : 'Uncategorized';
+            },
+            
+            sanitize: (str) => {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
         };
 
         /* --- 3. APP (Controller & UI) --- */
@@ -416,6 +480,11 @@
                 if (Store.state.theme === 'dark') {
                     document.body.classList.add('dark-mode');
                     document.getElementById('toggleTheme').textContent = '☀️';
+                }
+                
+                // Set Privacy Mode
+                if (Store.state.privacyMode) {
+                    document.body.classList.add('privacy-mode');
                 }
 
                 // Set Default Date in Modal
@@ -440,7 +509,17 @@
                 document.getElementById('openAddTxModal').addEventListener('click', () => {
                     document.getElementById('txForm').reset();
                     document.getElementById('txDate').valueAsDate = new Date();
-                    document.getElementById('txModal').showModal();
+                    const modal = document.getElementById('txModal');
+                    modal.showModal();
+                    // Focus first input for accessibility
+                    setTimeout(() => document.getElementById('txAmount').focus(), 100);
+                });
+                
+                // ESC key handler for modal
+                document.getElementById('txModal').addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        e.target.close();
+                    }
                 });
 
                 // Form: Add Transaction
@@ -448,31 +527,58 @@
                     e.preventDefault();
                     const type = document.getElementById('txType').value;
                     const amount = parseFloat(document.getElementById('txAmount').value);
+                    const date = document.getElementById('txDate').value;
+                    const desc = document.getElementById('txDesc').value.trim();
                     
-                    Store.addTransaction({
-                        date: document.getElementById('txDate').value,
-                        desc: document.getElementById('txDesc').value,
-                        category: document.getElementById('txCategory').value,
-                        amount: type === 'expense' ? amount : -amount, 
+                    // Validation
+                    if (isNaN(amount) || amount <= 0) {
+                        alert('Amount must be a positive number');
+                        return;
+                    }
+                    if (amount > 999999999) {
+                        alert('Amount is too large');
+                        return;
+                    }
+                    if (!desc) {
+                        alert('Description is required');
+                        return;
+                    }
+                    if (new Date(date) > new Date()) {
+                        const proceed = confirm('This date is in the future. Continue?');
+                        if (!proceed) return;
+                    }
+                    
+                    const success = Store.addTransaction({
+                        date: date,
+                        desc: desc,
+                        category: type === 'income' ? null : document.getElementById('txCategory').value,
+                        amount: type === 'expense' ? -amount : amount, // Expenses negative, income positive
                         type: type
                     });
-                    document.getElementById('txModal').close();
+                    
+                    if (success) {
+                        document.getElementById('txModal').close();
+                    }
                 });
 
                 // Transaction Type Toggle
                 const btnExp = document.getElementById('typeExpense');
                 const btnInc = document.getElementById('typeIncome');
                 btnExp.addEventListener('click', () => {
-                    btnExp.classList.add('btn-primary'); btnExp.classList.remove('btn-outline');
-                    btnInc.classList.add('btn-outline'); btnInc.classList.remove('btn-primary');
+                    btnExp.classList.add('btn-primary'); 
+                    btnExp.classList.remove('btn-outline');
+                    btnInc.classList.add('btn-outline'); 
+                    btnInc.classList.remove('btn-primary');
                     document.getElementById('txType').value = 'expense';
-                    document.getElementById('txCategory').closest('div').classList.remove('hidden');
+                    document.getElementById('categorySelectContainer').classList.remove('hidden');
                 });
                 btnInc.addEventListener('click', () => {
-                    btnInc.classList.add('btn-primary'); btnInc.classList.remove('btn-outline');
-                    btnExp.classList.add('btn-outline'); btnExp.classList.remove('btn-primary');
+                    btnInc.classList.add('btn-primary'); 
+                    btnInc.classList.remove('btn-outline');
+                    btnExp.classList.add('btn-outline'); 
+                    btnExp.classList.remove('btn-primary');
                     document.getElementById('txType').value = 'income';
-                    document.getElementById('txCategory').closest('div').classList.add('hidden');
+                    document.getElementById('categorySelectContainer').classList.add('hidden');
                 });
 
                 // Search & Filter
@@ -482,8 +588,9 @@
 
                 // Privacy Toggle
                 document.getElementById('togglePrivacy').addEventListener('click', () => {
-                    document.body.classList.toggle('privacy-mode');
                     Store.state.privacyMode = !Store.state.privacyMode;
+                    document.body.classList.toggle('privacy-mode', Store.state.privacyMode);
+                    Store.save();
                 });
                 
                 // Theme Toggle
@@ -503,15 +610,31 @@
 
                 // Planning Inputs
                 document.getElementById('monthlyIncome').addEventListener('change', (e) => {
-                    Store.state.income = parseFloat(e.target.value);
+                    const income = parseFloat(e.target.value);
+                    if (isNaN(income) || income < 0) {
+                        alert('Income must be a positive number');
+                        e.target.value = Store.state.income;
+                        return;
+                    }
+                    if (income > 999999999) {
+                        alert('Income value is too large');
+                        e.target.value = Store.state.income;
+                        return;
+                    }
+                    Store.state.income = Utils.roundMoney(income);
                     Store.save();
                 });
 
                 // Add Category
                 document.getElementById('addCategoryForm').addEventListener('submit', (e) => {
                     e.preventDefault();
+                    const name = document.getElementById('newCatName').value.trim();
+                    if (!name) {
+                        alert('Category name is required');
+                        return;
+                    }
                     Store.addCategory(
-                        document.getElementById('newCatName').value,
+                        name,
                         document.getElementById('newCatGroup').value
                     );
                     document.getElementById('addCategoryForm').reset();
@@ -528,17 +651,26 @@
 
             getMetrics() {
                 const currentTx = Store.state.transactions.filter(t => Utils.isCurrentMonth(t.date));
-                const totalSpent = currentTx.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-                const totalIncomeTx = Math.abs(currentTx.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0));
+                const sortedTx = [...Store.state.transactions].sort((a,b) => new Date(b.date) - new Date(a.date));
                 
-                const effectiveIncome = Store.state.income + totalIncomeTx; 
-                const totalBudget = Store.state.categories.reduce((sum, c) => sum + c.limit, 0);
+                // Sum expenses (negative values, so use Math.abs)
+                const totalSpent = Utils.roundMoney(
+                    Math.abs(currentTx.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0))
+                );
+                
+                // Sum income (positive values)
+                const totalIncomeTx = Utils.roundMoney(
+                    currentTx.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0)
+                );
+                
+                const effectiveIncome = Utils.roundMoney(Store.state.income + totalIncomeTx); 
+                const totalBudget = Utils.roundMoney(Store.state.categories.reduce((sum, c) => sum + c.limit, 0));
 
-                return { currentTx, totalSpent, effectiveIncome, totalBudget };
+                return { currentTx, sortedTx, totalSpent, effectiveIncome, totalBudget };
             },
 
             renderDashboard() {
-                const { currentTx, totalSpent, effectiveIncome, totalBudget } = this.getMetrics();
+                const { currentTx, sortedTx, totalSpent, effectiveIncome, totalBudget } = this.getMetrics();
                 
                 document.getElementById('dashTotalSpent').textContent = Utils.fmtMoney(totalSpent);
                 document.getElementById('dashRemaining').textContent = Utils.fmtMoney(effectiveIncome - totalSpent);
@@ -552,9 +684,11 @@
                 container.innerHTML = '';
                 
                 Store.state.categories.forEach(cat => {
-                    const spent = currentTx
-                        .filter(t => t.type === 'expense' && t.category === cat.id)
-                        .reduce((sum, t) => sum + t.amount, 0);
+                    const spent = Utils.roundMoney(
+                        Math.abs(currentTx
+                            .filter(t => t.type === 'expense' && t.category === cat.id)
+                            .reduce((sum, t) => sum + t.amount, 0))
+                    );
                     
                     if (cat.limit === 0 && spent === 0) return; 
 
@@ -564,37 +698,61 @@
                     if (pct > 100) colorClass = 'bg-red';
 
                     const div = document.createElement('div');
-                    div.innerHTML = `
-                        <div class="flex flex-between text-sm mb-1">
-                            <span>${cat.name}</span>
-                            <span class="private-data">${Utils.fmtMoney(spent)} / ${Utils.fmtMoney(cat.limit)}</span>
-                        </div>
-                        <div class="progress-track">
-                            <div class="progress-fill ${colorClass}" style="width: ${Math.min(pct, 100)}%"></div>
-                        </div>
-                    `;
+                    const labelEl = document.createElement('div');
+                    labelEl.className = 'flex flex-between text-sm mb-1';
+                    
+                    const nameSpan = document.createElement('span');
+                    nameSpan.textContent = cat.name;
+                    
+                    const amountSpan = document.createElement('span');
+                    amountSpan.className = 'private-data';
+                    amountSpan.textContent = `${Utils.fmtMoney(spent)} / ${Utils.fmtMoney(cat.limit)}`;
+                    
+                    labelEl.appendChild(nameSpan);
+                    labelEl.appendChild(amountSpan);
+                    
+                    const progressTrack = document.createElement('div');
+                    progressTrack.className = 'progress-track';
+                    
+                    const progressFill = document.createElement('div');
+                    progressFill.className = `progress-fill ${colorClass}`;
+                    progressFill.style.width = `${Math.min(pct, 100)}%`;
+                    
+                    progressTrack.appendChild(progressFill);
+                    div.appendChild(labelEl);
+                    div.appendChild(progressTrack);
                     container.appendChild(div);
                 });
 
-                // Recent Tx
+                // Recent Transactions
                 const list = document.getElementById('recentList');
                 list.innerHTML = '';
-                const recent = [...Store.state.transactions].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+                const recent = sortedTx.slice(0, 5);
                 
                 recent.forEach(t => {
-                    const catName = t.type === 'income' ? 'Income' : (Store.state.categories.find(c => c.id === t.category)?.name || 'Uncategorized');
+                    const catName = t.type === 'income' ? 'Income' : Utils.getCategoryName(t.category);
                     const div = document.createElement('div');
-                    div.className = 'card flex flex-between p-2';
+                    div.className = 'card flex flex-between';
                     div.style.padding = '0.75rem';
-                    div.innerHTML = `
-                        <div>
-                            <div class="font-bold">${t.desc}</div>
-                            <div class="text-sm">${Utils.fmtDate(t.date)} • ${catName}</div>
-                        </div>
-                        <div class="${t.type === 'expense' ? 'text-danger' : 'text-success'} private-data">
-                            ${t.type === 'expense' ? '-' : '+'}${Utils.fmtMoney(Math.abs(t.amount))}
-                        </div>
-                    `;
+                    
+                    const leftDiv = document.createElement('div');
+                    const descDiv = document.createElement('div');
+                    descDiv.style.fontWeight = 'bold';
+                    descDiv.textContent = t.desc;
+                    
+                    const detailDiv = document.createElement('div');
+                    detailDiv.className = 'text-sm';
+                    detailDiv.textContent = `${Utils.fmtDate(t.date)} • ${catName}`;
+                    
+                    leftDiv.appendChild(descDiv);
+                    leftDiv.appendChild(detailDiv);
+                    
+                    const amountDiv = document.createElement('div');
+                    amountDiv.className = `${t.type === 'expense' ? 'text-danger' : 'text-success'} private-data`;
+                    amountDiv.textContent = `${t.type === 'expense' ? '-' : '+'}${Utils.fmtMoney(Math.abs(t.amount))}`;
+                    
+                    div.appendChild(leftDiv);
+                    div.appendChild(amountDiv);
                     list.appendChild(div);
                 });
             },
@@ -606,29 +764,59 @@
                 const search = document.getElementById('searchTx').value.toLowerCase();
                 const filterCat = document.getElementById('filterCategory').value;
 
-                let txs = [...Store.state.transactions].sort((a,b) => new Date(b.date) - new Date(a.date));
+                const { sortedTx } = this.getMetrics();
 
-                txs = txs.filter(t => {
+                let txs = sortedTx.filter(t => {
                     const matchSearch = t.desc.toLowerCase().includes(search);
                     const matchCat = filterCat === 'all' || t.category === filterCat;
                     return matchSearch && matchCat;
                 });
 
                 txs.forEach(t => {
-                    const cat = Store.state.categories.find(c => c.id === t.category);
+                    const cat = Utils.getCategoryById(t.category);
                     const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${Utils.fmtDate(t.date)}</td>
-                        <td>${t.desc}</td>
-                        <td>${t.type === 'income' ? 'Income' : (cat?.name || '-')}</td>
-                        <td>${t.type === 'income' ? '-' : `<span class="badge badge-${cat?.group}">${cat?.group}</span>`}</td>
-                        <td class="text-right private-data ${t.type === 'expense' ? 'text-danger' : 'text-success'}">
-                             ${t.type === 'expense' ? '-' : '+'}${Utils.fmtMoney(Math.abs(t.amount))}
-                        </td>
-                        <td class="text-right">
-                            <button class="btn-sm btn-danger" onclick="Store.deleteTransaction('${t.id}')">×</button>
-                        </td>
-                    `;
+                    
+                    const dateCell = document.createElement('td');
+                    dateCell.textContent = Utils.fmtDate(t.date);
+                    
+                    const descCell = document.createElement('td');
+                    descCell.textContent = t.desc;
+                    
+                    const catCell = document.createElement('td');
+                    catCell.textContent = t.type === 'income' ? 'Income' : (cat?.name || '-');
+                    
+                    const groupCell = document.createElement('td');
+                    if (t.type === 'income') {
+                        groupCell.textContent = '-';
+                    } else {
+                        const badge = document.createElement('span');
+                        badge.className = `badge badge-${cat?.group}`;
+                        badge.textContent = cat?.group || '';
+                        groupCell.appendChild(badge);
+                    }
+                    
+                    const amountCell = document.createElement('td');
+                    amountCell.className = `text-right private-data ${t.type === 'expense' ? 'text-danger' : 'text-success'}`;
+                    amountCell.textContent = `${t.type === 'expense' ? '-' : '+'}${Utils.fmtMoney(Math.abs(t.amount))}`;
+                    
+                    const actionCell = document.createElement('td');
+                    actionCell.className = 'text-right';
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'btn-sm btn-danger';
+                    deleteBtn.textContent = '×';
+                    deleteBtn.onclick = () => {
+                        if (confirm('Delete this transaction?')) {
+                            Store.deleteTransaction(t.id);
+                        }
+                    };
+                    actionCell.appendChild(deleteBtn);
+                    
+                    row.appendChild(dateCell);
+                    row.appendChild(descCell);
+                    row.appendChild(catCell);
+                    row.appendChild(groupCell);
+                    row.appendChild(amountCell);
+                    row.appendChild(actionCell);
                     tbody.appendChild(row);
                 });
             },
@@ -646,22 +834,40 @@
                 sortedCats.forEach(cat => {
                     totalBudgeted += cat.limit;
                     const div = document.createElement('div');
-                    div.className = 'flex flex-between items-center mb-2 p-2 border-b';
+                    div.className = 'flex flex-between items-center mb-2';
+                    div.style.padding = '0.5rem';
                     div.style.borderBottom = '1px solid var(--border)';
-                    div.innerHTML = `
-                        <div class="flex gap-2 items-center">
-                            <span class="badge badge-${cat.group}">${cat.group}</span>
-                            <span>${cat.name}</span>
-                        </div>
-                        <input type="number" 
-                            value="${cat.limit}" 
-                            onchange="Store.updateBudgetLimit('${cat.id}', this.value)"
-                            style="width: 100px; text-align: right">
-                    `;
+                    
+                    const leftDiv = document.createElement('div');
+                    leftDiv.className = 'flex gap-2 items-center';
+                    
+                    const badge = document.createElement('span');
+                    badge.className = `badge badge-${cat.group}`;
+                    badge.textContent = cat.group;
+                    
+                    const nameSpan = document.createElement('span');
+                    nameSpan.textContent = cat.name;
+                    
+                    leftDiv.appendChild(badge);
+                    leftDiv.appendChild(nameSpan);
+                    
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.value = cat.limit;
+                    input.min = '0';
+                    input.step = '0.01';
+                    input.style.width = '120px';
+                    input.style.textAlign = 'right';
+                    input.onchange = function() {
+                        Store.updateBudgetLimit(cat.id, this.value);
+                    };
+                    
+                    div.appendChild(leftDiv);
+                    div.appendChild(input);
                     container.appendChild(div);
                 });
 
-                const remaining = Store.state.income - totalBudgeted;
+                const remaining = Utils.roundMoney(Store.state.income - totalBudgeted);
                 const unEl = document.getElementById('unassignedMoney');
                 unEl.textContent = Utils.fmtMoney(remaining);
                 unEl.className = remaining < 0 ? 'text-danger private-data' : 'text-success private-data';
@@ -673,26 +879,46 @@
                 // Group Breakdown
                 const groupData = { needs: 0, wants: 0, savings: 0 };
                 currentTx.filter(t => t.type === 'expense').forEach(t => {
-                    const cat = Store.state.categories.find(c => c.id === t.category);
-                    if (cat) groupData[cat.group] += t.amount;
+                    const cat = Utils.getCategoryById(t.category);
+                    if (cat) groupData[cat.group] += Math.abs(t.amount);
                 });
 
                 const container = document.getElementById('groupBreakdown');
                 container.innerHTML = '';
-                const total = groupData.needs + groupData.wants + groupData.savings;
+                const total = Utils.roundMoney(groupData.needs + groupData.wants + groupData.savings);
                 
                 Object.entries(groupData).forEach(([key, val]) => {
                     if (val === 0) return;
-                    const pct = ((val / total) * 100).toFixed(0);
-                    container.innerHTML += `
-                        <div class="mb-2">
-                            <div class="flex flex-between text-sm">
-                                <span class="capitalize">${key}</span>
-                                <span class="private-data">${pct}% (${Utils.fmtMoney(val)})</span>
-                            </div>
-                            <div class="progress-track"><div class="progress-fill bg-primary" style="width: ${pct}%"></div></div>
-                        </div>
-                    `;
+                    const pct = total > 0 ? ((val / total) * 100).toFixed(0) : 0;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'mb-2';
+                    
+                    const labelDiv = document.createElement('div');
+                    labelDiv.className = 'flex flex-between text-sm';
+                    
+                    const keySpan = document.createElement('span');
+                    keySpan.style.textTransform = 'capitalize';
+                    keySpan.textContent = key;
+                    
+                    const valSpan = document.createElement('span');
+                    valSpan.className = 'private-data';
+                    valSpan.textContent = `${pct}% (${Utils.fmtMoney(val)})`;
+                    
+                    labelDiv.appendChild(keySpan);
+                    labelDiv.appendChild(valSpan);
+                    
+                    const progressTrack = document.createElement('div');
+                    progressTrack.className = 'progress-track';
+                    
+                    const progressFill = document.createElement('div');
+                    progressFill.className = 'progress-fill bg-primary';
+                    progressFill.style.width = `${pct}%`;
+                    
+                    progressTrack.appendChild(progressFill);
+                    div.appendChild(labelDiv);
+                    div.appendChild(progressTrack);
+                    container.appendChild(div);
                 });
 
                 // Trend Chart
@@ -707,9 +933,13 @@
 
                 let maxSpent = 0;
                 const monthlyTotals = months.map(m => {
-                    const spent = Store.state.transactions
-                        .filter(t => t.type === 'expense' && new Date(t.date).getMonth() === m.getMonth() && new Date(t.date).getFullYear() === m.getFullYear())
-                        .reduce((sum, t) => sum + t.amount, 0);
+                    const spent = Utils.roundMoney(
+                        Math.abs(Store.state.transactions
+                            .filter(t => t.type === 'expense' && 
+                                   new Date(t.date).getMonth() === m.getMonth() && 
+                                   new Date(t.date).getFullYear() === m.getFullYear())
+                            .reduce((sum, t) => sum + t.amount, 0))
+                    );
                     if (spent > maxSpent) maxSpent = spent;
                     return { label: m.toLocaleString('default', { month: 'short' }), val: spent };
                 });
@@ -719,8 +949,13 @@
                     const col = document.createElement('div');
                     col.className = 'chart-col private-data';
                     col.style.height = `${Math.max(heightPct, 1)}%`;
-                    col.innerHTML = `<span class="chart-label">${d.label}</span>`;
                     col.title = Utils.fmtMoney(d.val);
+                    
+                    const label = document.createElement('span');
+                    label.className = 'chart-label';
+                    label.textContent = d.label;
+                    
+                    col.appendChild(label);
                     chart.appendChild(col);
                 });
             },
@@ -741,21 +976,23 @@
                         opt.textContent = c.name;
                         sel.appendChild(opt);
                     });
-                    if (currentVal && Array.from(sel.options).some(o => o.value === currentVal)) sel.value = currentVal;
+                    if (currentVal && Array.from(sel.options).some(o => o.value === currentVal)) {
+                        sel.value = currentVal;
+                    }
                 });
             },
 
             exportCSV() {
-                const headers = ["Date", "Description", "Category", "Group", "Type", "Amount"];
+                const headers = ["Date", "Description", "Category", "Group", "Type", "Amount (PHP)"];
                 const rows = Store.state.transactions.map(t => {
-                    const cat = Store.state.categories.find(c => c.id === t.category);
+                    const cat = Utils.getCategoryById(t.category);
                     return [
                         t.date,
                         `"${t.desc.replace(/"/g, '""')}"`,
                         cat ? cat.name : "Uncategorized",
                         cat ? cat.group : "-",
                         t.type,
-                        t.type === 'expense' ? -t.amount : t.amount
+                        (t.type === 'expense' ? t.amount : t.amount).toFixed(2)
                     ].join(",");
                 });
                 
@@ -763,7 +1000,7 @@
                 const encodedUri = encodeURI(csvContent);
                 const link = document.createElement("a");
                 link.setAttribute("href", encodedUri);
-                link.setAttribute("download", "budget_export.csv");
+                link.setAttribute("download", "zenbudget_export_php.csv");
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
